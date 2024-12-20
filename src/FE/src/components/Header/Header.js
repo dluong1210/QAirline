@@ -93,6 +93,7 @@ const Notification = () => {
 
 const UserDropdown = ({ avatar, setAvatar }) => {
   const { user, logout } = useAuth();
+  console.log(user)
   const [ showDropdown, setShowDropdown ] = useState(false);
   const navigate = useNavigate();
 
@@ -121,7 +122,7 @@ const UserDropdown = ({ avatar, setAvatar }) => {
           <div className="dropdown-header">
             <img src={avatar || "img/default_avatar.png"} alt="Avatar" className="dropdown-avatar" />
             <div className="dropdown-user-info">
-              <span className="dropdown-name">{user.name || 'Hoàng Vũ Lê'}</span>
+              <span className="dropdown-name">{user.username || 'Hoàng Vũ Lê'}</span>
               <span className="dropdown-username">@{user.username || 'lehoangvu6'}</span>
             </div>
           </div>
