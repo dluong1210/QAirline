@@ -159,6 +159,8 @@ function MyFlight() {
                 }`}
               onClick={() => {
                 setView("noCode");
+                setShowTicket(false);
+                setCode("");
                 getAllTickets();
               }}
             >

@@ -70,7 +70,7 @@ const Notification = () => {
             Error: {error}
           </p>
         ) : notifications.length > 0 ? (
-          notifications.map((notification, index) => (
+          notifications.reverse().map((notification, index) => (
             <div
               key={index}
               className={`notification-item ${notification.unRead ? 'unread' : ''}`}
