@@ -132,6 +132,14 @@ function MainContent() {
         return;
       }
 
+      if (departureDate > returnDate) {
+        setShowInvalidDate(true);
+        setTimeout(() => {
+          setShowInvalidDate(false);
+        }, 3000);
+        return;
+      }
+
       setLoading(true); // Show loading immediately
 
       const startDay = departureDate.getDate();
