@@ -15,6 +15,7 @@ import { searchFilter } from 'utils/filter/searchFilter';
 import { columnFilter } from 'utils/filter/columnFilter';
 
 import styles from './AdminTable.module.css';
+import PaginationControls from '../PaginationControls/PaginationControls';
 
 export default function AdminTable({
     columns,
@@ -101,6 +102,24 @@ export default function AdminTable({
     // Add state for global search
     const [globalSearch, setGlobalSearch] = useState('');
 
+    const handlePageInputChange = (e) => {
+        const value = e.target.value;
+        if (value === '') {
+            setPageInput('');
+            return;
+        }
+        const page = parseInt(value);
+        if (page >= 1 && page <= totalPages) {
+            handlePageChange(page);
+        }
+    };
+
+    const handlePageInputBlur = (e) => {
+        if (e.target.value === '') {
+            handlePageChange(1);
+        }
+    };
+
     return (
         <div className={styles.tableWrapper}>
             <div className={styles.tableHeader}>
@@ -111,96 +130,21 @@ export default function AdminTable({
                 />
             </div>
 
-            {/* Pagination Controls */}
-            <div className={styles.paginationContainer}>
-                <div className={styles.paginationInfo}>
-                    Showing {startIndex + 1}-{endIndex} of {totalItems} items
-                </div>
-
-                <div style={{display: 'flex', gap: '1rem'}}>
-                    <div className={styles.paginationControls}>
-                        <button
-                            onClick={() => handlePageChange(1)}
-                            disabled={currentPage === 1}
-                            className={styles.paginationButton}
-                        >
-                            First
-                        </button>
-                        <button
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
-                            className={styles.paginationButton}
-                        >
-                            <FaChevronLeft />
-                        </button>
-                        <span className={styles.pageInfo}>
-                            Page{' '}
-                            <input
-                                type="number"
-                                min={1}
-                                max={totalPages}
-                                value={pageInput}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    if (value === '') {
-                                        // Allow empty field without updating page
-                                        setPageInput('');
-                                        return;
-                                    }
-                                    const page = parseInt(value);
-                                    if (page >= 1 && page <= totalPages) {
-                                        handlePageChange(page);
-                                    }
-                                }}
-                                onBlur={(e) => {
-                                    if (e.target.value === '') {
-                                        handlePageChange(1);
-                                    }
-                                }}
-                                style={{
-                                    textAlign: 'center',
-                                    margin: '0 4px',
-                                    WebkitAppearance: 'textfield',
-                                    MozAppearance: 'textfield',
-                                    appearance: 'textfield',
-                                }}
-                            />
-                            {' '}of {totalPages}
-                        </span>
-                        <button
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                            className={styles.paginationButton}
-                        >
-                            <FaChevronRight />
-                        </button>
-                        <button
-                            onClick={() => handlePageChange(totalPages)}
-                            disabled={currentPage === totalPages}
-                            className={styles.paginationButton}
-                        >
-                            Last
-                        </button>
-                    </div>
-
-                    <div className={styles.pageSize}>
-                        <select 
-                            value={pageSize}
-                            onChange={(e) => handlePageSizeChange(e.target.value)}
-                        >
-                            {pageSizeOptions.map(size => (
-                                <option key={size} value={size}>
-                                    {size} per page
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <RefreshButton onRefresh={onRefresh} loadState={loadState} />
-                </div>
+            <div className={styles.tablePagination}>
+                <PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    totalItems={totalItems}
+                    pageSizeOptions={pageSizeOptions}
+                    onPageChange={handlePageChange}
+                    onPageSizeChange={handlePageSizeChange}
+                    pageInput={pageInput}
+                    onPageInputChange={handlePageInputChange}
+                    onPageInputBlur={handlePageInputBlur}
+                    onRefresh={onRefresh}
+                />
             </div>
-            
-            
 
             <div className={styles.tableContainer}>
                 <table className={styles.table}>

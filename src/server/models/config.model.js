@@ -15,7 +15,7 @@ export const sequelize = new Sequelize(
       ssl: {
         rejectUnauthorized: true,
       },
-      connectTimeout: 10000,
+      connectTimeout: 60000,
     },
   }
 );

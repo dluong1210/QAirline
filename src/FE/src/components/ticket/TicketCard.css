@@ -172,45 +172,85 @@ div.unpaid {
   color: #f8860b;
 }
 
-/* Thêm ô nhỏ chứa hai nút */
 .action-box {
-  display: none; /* Mặc định ẩn */
-  position: relative;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-  opacity: 0; /* Bắt đầu với độ mờ */
-  transform: translateY(-20px); /* Bắt đầu ở vị trí lệch trên */
-  transition: opacity 3s ease, transform 3s ease; /* Thêm hiệu ứng cho opacity và transform */
-}
-
-/* Khi vé được chọn (có class selected), hiển thị action-box và thực hiện hiệu ứng trượt */
-.ticket-card.selected .action-box {
   display: flex;
-  opacity: 1; /* Độ mờ bằng 1 khi hiển thị */
-  transform: translateY(0); /* Di chuyển trở lại vị trí ban đầu */
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(-20px);
+  max-height: 0;
+  padding: 0px 10px;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out,
+    max-height 0.3s ease-in-out;
 }
 
-/* Nút bên trong ô nhỏ */
+.action-box.show {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 150px;
+}
+
+.action-box.hide {
+  opacity: 0;
+  transform: translateY(-20px);
+  max-height: 0;
+}
+
 .action-box .btn {
-  padding: 8px 16px;
-  margin: 5px 0;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Căn giữa icon và text */
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  color: white; /* Màu chữ */
+  font-size: 20px;
   cursor: pointer;
-  transition: background-color 3s ease;
+  position: relative;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.action-box .btn i {
+  font-size: 18px;
+}
+
+.action-box .btn span {
+  position: absolute; /* Để căn chỉnh text chính xác */
+  opacity: 0; /* Ban đầu ẩn */
+  visibility: hidden; /* Ban đầu ẩn */
+  color: white;
+  font-size: 14px;
+  left: 50%; /* Đặt văn bản ở giữa */
+  top: 50%; /* Đặt văn bản ở giữa */
+  transform: translate(-50%, -50%) translateX(-100%); /* Ban đầu ẩn bên trái */
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển động */
+  margin-left: 8px; /* Khoảng cách giữa icon và text */
+}
+
+/* Khi hover vào nút, kéo dài và hiển thị text */
+.action-box .btn:hover {
+  justify-content: space-between;
+  width: 150px; /* Nút sẽ mở rộng chiều rộng khi hover */
+}
+
+/* Khi hover vào nút, trượt text vào giữa */
+.action-box .btn:hover span {
+  opacity: 1; /* Hiển thị văn bản */
+  visibility: visible; /* Đảm bảo văn bản được hiển thị */
+  transform: translate(-50%, -50%) translateX(0); /* Trượt văn bản vào giữa */
+}
+/* Thay đổi màu nền khi hover */
+.action-box .btn:hover {
+  background-color: #d94e50;
 }
 
 /* Nút "View Details" */
 .action-box .btn.view-details {
+  flex-direction: row-reverse;
   background-color: #4caf50;
   color: #fff;
 }

@@ -250,7 +250,10 @@ export const createFlight = async (req, res) => {
 
     const idFlight = flight.idFlight;
 
+    console.log(classes);
+
     for (const classType in classes) {
+      console.log(classType);
       if (classes.hasOwnProperty(classType)) {
         const { seatAmount, currentPrice } = classes[classType];
 
@@ -354,17 +357,19 @@ export const changeInfoFlight = async (req, res) => {
             transaction,
           });
 
-          if (classFlight) {
+          if (classFlight !== null) {
             // Kiểm tra sự thay đổi giữa dữ liệu mới và dữ liệu cũ
             const seatAmountChanged = classFlight.seatAmount !== seatAmount;
             const currentPriceChanged =
               classFlight.currentPrice !== currentPrice;
 
+            console.log(seatAmountChanged);
+
             if (seatAmountChanged || currentPriceChanged) {
               const [classUpdateRows] = await ClassFlight.update(
                 {
-                  seatAmount,
-                  currentPrice,
+                  seatAmount: seatAmount,
+                  currentPrice: currentPrice,
                 },
                 {
                   where: { idFlight, class: classType },
@@ -372,12 +377,14 @@ export const changeInfoFlight = async (req, res) => {
                 }
               );
 
-              if (classUpdateRows === 0) {
-                await transaction.rollback();
-                return res.status(404).json({
-                  message: `Class ${classType} not found for the flight.`,
-                });
-              }
+              // console.log(classFlight);
+
+              // if (classUpdateRows === 0) {
+              //   await transaction.rollback();
+              //   return res.status(404).json({
+              //     message: `Class ${classType} not found for the flight.`,
+              //   });
+              // }
             }
           } else {
             await transaction.rollback();
@@ -466,8 +473,82 @@ export const getAllFlightsAdmin = async (req, res) => {
           required: true,
         },
       ],
+      indexHints: [{ type: 'USE', values: ['PRIMARY'] }],
     });
     res.send(flights);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+};
+
+export const getFlightsPaged = async (req, res) => {
+  const { pageSize, pageNumber } = req.body;
+  try {
+    const flights = await Flight.findAll({
+      include: [
+        {
+          model: Airplane,
+          required: true,
+        },
+        {
+          model: Airport,
+          as: "beginAirport",
+          required: true,
+        },
+        {
+          model: Airport,
+          as: "endAirport",
+          required: true,
+        },
+        {
+          model: ClassFlight,
+          required: true,
+        },
+      ],
+      indexHints: [{ type: 'USE', values: ['PRIMARY'] }],
+      offset: pageSize*(pageNumber-1),
+      limit: pageSize,
+    });
+    res.send(flights);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+}
+
+export const getInfoFlightAdmin = async (req, res) => {
+  const { idFlight } = req.query;
+  try {
+    const flight = await Flight.findOne({
+      where: {
+        idFlight,
+      },
+      include: [
+        {
+          model: Airplane,
+          required: true,
+        },
+        {
+          model: Airport,
+          as: "beginAirport",
+          attributes: ["idairport", "name", "city", "code"],
+        },
+        {
+          model: Airport,
+          as: "endAirport",
+          attributes: ["idairport", "name", "city", "code"],
+        },
+        {
+          model: ClassFlight,
+        },
+      ],
+    });
+    if (flight === null) {
+      res.status(404).json({ message: "No flight found with the given id." });
+      return;
+    }
+    res.status(200).send(flight);
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);

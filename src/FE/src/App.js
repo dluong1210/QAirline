@@ -81,6 +81,7 @@ class App extends Component {
                 <rd.Route path="aircrafts" element={<AdminAircrafts />}></rd.Route>
                 <rd.Route path="schedules" element={<AdminSchedules />}></rd.Route>
                 <rd.Route path="flights" element={<AdminFlights />}></rd.Route>
+                <rd.Route path="bookings" element={<AdminBookings />}></rd.Route>
                 <rd.Route path="advertisements" element={<AdminAdvertisements />}></rd.Route>
               </rd.Route>
               

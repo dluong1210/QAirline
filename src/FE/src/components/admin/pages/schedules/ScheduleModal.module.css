@@ -1,0 +1,204 @@
+.scheduleForm {
+    padding: 20px;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.formGroup input[type="text"] {
+    width: 100%;
+}
+
+.formGroup input[type="date"],
+.formGroup input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.formGroup input[type="date"] {
+    margin-right: 8px;
+}
+
+.checkboxGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkboxGroup label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.formActions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.submitButton,
+.cancelButton {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.submitButton {
+    background-color: #007bff;
+    color: white;
+}
+
+.cancelButton {
+    background-color: #6c757d;
+    color: white;
+}
+
+.formGroup input[type="text"] {
+    flex: 1;
+    font-size: 14px;
+    color: black;
+    background-color: transparent;
+    font-family: "Poppins", sans-serif;
+}
+
+.formGroup :global(.airport-search .list-airports) {
+    left: 0px;
+}
+
+.classTypeContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 50px;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.classTypeContainer > label {
+    align-self: last baseline;
+    margin-bottom: 2px;
+}
+
+.classTypeDetails {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.classTypeDetails input {
+    width: 80px;
+}
+
+.capacityInfo {
+    margin-top: 1rem;
+    font-size: 0.9em;
+    color: #666;
+    text-align: end;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: fit-content;
+}
+
+.inputGroup label {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.classTypeDetails {
+    display: flex;
+    gap: 1rem;
+}
+
+.error {
+    color: #dc3545;
+    font-size: 0.6em;
+    margin-top: 4px;
+    margin-inline-start: 0.5em;
+    display: block;
+}
+
+.formGroup {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.formGroup input.hasError,
+.formGroup select.hasError {
+    border-color: #dc3545;
+}
+
+.formGroup input.hasError:focus,
+.formGroup select.hasError:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.flightInfo {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.flightHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.flightId {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.scheduled {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.ongoing {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.completed {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.editingDisabled {
+    color: #d32f2f;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.formGroup input:disabled {
+    cursor: not-allowed;
+}

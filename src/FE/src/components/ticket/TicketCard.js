@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./TicketCard.css";
 
-const TicketCard = ({ ticket, onSelectTicket, selectedTicket }) => {
+const TicketCard = ({
+  ticket,
+  onSelectTicket,
+  selectedTicket,
+  containerRef,
+}) => {
+  const cardRef = useRef(null);
+
   const [isSelected, setSelected] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const formatDateAndTime = (isoDate) => {
     const date = new Date(isoDate);
@@ -39,7 +47,34 @@ const TicketCard = ({ ticket, onSelectTicket, selectedTicket }) => {
   const handleClick = () => {
     if (onSelectTicket) {
       onSelectTicket(ticket);
-      setSelected(!isSelected);
+
+      if (!isSelected) {
+        if (cardRef.current && containerRef.current) {
+          const cardRect = cardRef.current.getBoundingClientRect();
+          const containerRect = containerRef.current.getBoundingClientRect();
+          // console.log(cardRect.top, containerRef.current.scrollTop);
+          const scrollTop =
+            containerRef.current.scrollTop +
+            (cardRect.top - containerRect.top) -
+            65;
+
+          containerRef.current.scrollTo({
+            top: scrollTop,
+            behavior: "smooth",
+          });
+        }
+        setIsAnimating(true);
+        setTimeout(() => {
+          setSelected(true);
+          setIsAnimating(false);
+        }, 10);
+      } else {
+        setSelected(false);
+        setIsAnimating(true);
+        setTimeout(() => {
+          setIsAnimating(false);
+        }, 300);
+      }
     }
   };
 
@@ -54,66 +89,88 @@ const TicketCard = ({ ticket, onSelectTicket, selectedTicket }) => {
   };
 
   useEffect(() => {
-    if (isSelected && selectedTicket.idTicket != ticket.idTicket)
+    if (
+      isSelected &&
+      selectedTicket &&
+      selectedTicket.idTicket != ticket.idTicket
+    ) {
       setSelected(false);
+      setIsAnimating(true);
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
+    }
   }, [selectedTicket]);
 
   return (
-    <div
-      className={`ticket-card ${isSelected ? "selected" : ""}`}
-      onClick={handleClick}
-    >
-      <div className="airport-code">
-        <div>{ticket.beginAirport.code}</div>
-        <div className="right">{ticket.endAirport.code}</div>
-      </div>
+    <div>
+      <div
+        ref={cardRef}
+        className={`ticket-card ${isSelected ? "selected" : ""}`}
+        onClick={handleClick}
+      >
+        <div className="airport-code">
+          <div>{ticket.beginAirport.code}</div>
+          <div className="right">{ticket.endAirport.code}</div>
+        </div>
 
-      <div className="city-name">
-        <div>{ticket.beginAirport.city}</div>
-        <div className="right">{ticket.endAirport.city}</div>
-      </div>
-      <div className="airport-info">
-        <div>{ticket.beginAirport.name}</div>
-        <div className="right">{ticket.endAirport.name}</div>
-      </div>
-      <div className="dot-container">
-        <div className="dot start-dot"></div>
-        <div className="dot end-dot"></div>
-        <img className="plane-icon" src="img/plane.png" alt="plane" />
-        <div className="dot start-overlay"></div>
-        <div className="dot end-overlay"></div>
-        <div className="line"></div>
-      </div>
-      <div className="flight-time">
-        <div>Depart</div>
-        <div>{time}</div>
-        <div>Arrive</div>
-      </div>
+        <div className="city-name">
+          <div>{ticket.beginAirport.city}</div>
+          <div className="right">{ticket.endAirport.city}</div>
+        </div>
+        <div className="airport-info">
+          <div>{ticket.beginAirport.name}</div>
+          <div className="right">{ticket.endAirport.name}</div>
+        </div>
+        <div className="dot-container">
+          <div className="dot start-dot"></div>
+          <div className="dot end-dot"></div>
+          <img className="plane-icon" src="img/plane.png" alt="plane" />
+          <div className="dot start-overlay"></div>
+          <div className="dot end-overlay"></div>
+          <div className="line"></div>
+        </div>
+        <div className="flight-time">
+          <div>Depart</div>
+          <div>{time}</div>
+          <div>Arrive</div>
+        </div>
 
-      <div className="date">
-        <div>{start.formattedDate}</div>
-        <div className="right">{end.formattedDate}</div>
-      </div>
+        <div className="date">
+          <div>{start.formattedDate}</div>
+          <div className="right">{end.formattedDate}</div>
+        </div>
 
-      <div className="time">
-        <div>{start.formattedTime}</div>
-        <div className="right">{end.formattedTime}</div>
-      </div>
+        <div className="time">
+          <div>{start.formattedTime}</div>
+          <div className="right">{end.formattedTime}</div>
+        </div>
 
-      <div className="line-solid"></div>
+        <div className="line-solid"></div>
 
-      <div className="total-price">
-        <div>{ticket.class}</div>
-        <div className={`${ticket.status.toLowerCase()}`}>{ticket.status}</div>
-        <div className="right">{ticket.price.toLocaleString("vi-VN")} VND</div>
+        <div className="total-price">
+          <div>{ticket.class}</div>
+          <div className={`${ticket.status.toLowerCase()}`}>
+            {ticket.status}
+          </div>
+          <div className="right">
+            {ticket.price.toLocaleString("vi-VN")} VND
+          </div>
+        </div>
       </div>
-      {isSelected && (
-        <div className="action-box">
-          <button className="btn view-details" onClick={handleViewDetails}>
-            View Details
+      {(isSelected || isAnimating) && (
+        <div
+          className={`action-box ${
+            isSelected ? "show" : isAnimating ? "hide" : ""
+          }`}
+        >
+          <button className="btn delete-ticket">
+            <i className="fas fa-trash"></i>
+            <span>Delete Ticket</span>
           </button>
-          <button className="btn delete-ticket" onClick={handleDeleteTicket}>
-            Delete Ticket
+          <button className="btn view-details">
+            <span>View Details </span>
+            <i className="fas fa-eye"></i>
           </button>
         </div>
       )}

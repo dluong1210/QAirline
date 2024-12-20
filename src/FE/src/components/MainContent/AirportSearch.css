@@ -64,3 +64,17 @@
 .airport-search .airport-list.show {
   max-height: 1300px; /* Enough height to show the list items */
 }
+
+/* Add styles for disabled state */
+.airport-search .input-field:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Optional: Style the container differently when disabled */
+.airport-search:has(.input-field:disabled) {
+    opacity: 0.8;
+}

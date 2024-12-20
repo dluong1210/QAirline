@@ -1,0 +1,49 @@
+.paginationContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.controlsWrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.paginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.paginationButton {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+}
+
+.paginationButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    display: flex;
+    align-items: center;
+}
+
+.pageInput {
+    width: 50px;
+    text-align: center;
+    margin: 0 4px;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.pageSize select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+}

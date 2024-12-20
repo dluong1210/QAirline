@@ -1,8 +1,10 @@
 .flightsPage {
-  padding: 20px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    padding: 20px;
+    padding-bottom: 0px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 110vh;
 }
 
 .header {
@@ -13,20 +15,19 @@
 }
 
 .content {
-  display: flex;
-  gap: 20px;
-  height: calc(100vh - 140px); /* Adjust based on your layout */
-  overflow: hidden;
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
 }
 
 .listSection {
-  flex: 0 0 400px; /* Fixed width */
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+    flex: 0 0 500px; /* Fixed width */
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
 }
 
 .listSection :global(.columnLabel) {
@@ -73,11 +74,6 @@
   margin-bottom: 12px;
 }
 
-.flightNumber {
-  font-weight: 600;
-  font-size: 1.1em;
-}
-
 .flightRoute {
   display: flex;
   align-items: center;
@@ -100,8 +96,20 @@
 }
 
 .flightFooter {
-  color: #666;
-  font-size: 0.9em;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.aircraftCode {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-right: 0.5em;
+}
+
+.aircraft {
+    color: #666;
 }
 
 .status {
@@ -112,24 +120,23 @@
 }
 
 .scheduled {
-  background-color: #cdfde4;
-  color: #00a854;
+    background-color: #E3F2FD;
+    color: #1976D2;
 }
 
-.pending,
 .ongoing {
-  background-color: #fae8c3;
-  color: #f8860b;
+    background-color: #fae8c3;
+    color: #f8860b;
 }
 
 .cancelled {
-  background-color: #ffe0de;
-  color: #dc3545;
+    background-color: #FFEBEE;
+    color: #C62828;
 }
 
 .completed {
-  background-color: #f0f0f0;
-  color: #666666;
+    background-color: #E8F5E9;
+    color: #2E7D32;
 }
 
 .searchHeader {
@@ -138,4 +145,9 @@
 
 .searchHeader :global(#clear-all-filters) {
   flex: 1 1;
+}
+
+.flightNumber {
+    font-size: 0.9em;
+    color: #666;
 }

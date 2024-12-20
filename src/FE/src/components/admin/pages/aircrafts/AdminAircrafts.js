@@ -128,57 +128,54 @@ function AircraftModal({ aircraft, onClose, onSubmit }) {
         <AdminModal 
             title={aircraft ? 'Edit Aircraft' : 'Add Aircraft'} 
             onClose={onClose}
+            handleSubmit={handleSubmit}
         >
-            <form onSubmit={handleSubmit}>
-                <div className={styles.formGroup}>
-                    <label>Aircraft Code</label>
-                    <input
-                        type="text"
-                        value={formData.code}
-                        onChange={e => setFormData({...formData, code: e.target.value})}
-                        required
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Aircraft Type</label>
-                    <input
-                        type="text"
-                        value={formData.type}
-                        onChange={e => setFormData({...formData, type: e.target.value})}
-                        required
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Capacity</label>
-                    <input
-                        type="number"
-                        value={formData.capacity}
-                        onChange={e => {
-                            const value = e.target.value;   
-                            if (value < 0) {
-                                return;
-                            }
-                            setFormData({...formData, capacity: value});
-                        }}
-                        required
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Status</label>
-                    <select
-                        value={formData.status}
-                        onChange={e => setFormData({...formData, status: e.target.value})}
-                    >
-                        <option value="Active">Active</option>
-                        <option value="Maintenance">Maintenance</option>
-                        <option value="Retired">Retired</option>
-                    </select>
-                </div>
-                <div className={styles.modalActions}>
-                    <button type="button" onClick={onClose}>Cancel</button>
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
+            <div className={styles.formGroup}>
+                <label>Aircraft Code</label>
+                <input
+                    type="text"
+                    value={formData.code}
+                    onChange={e => setFormData({...formData, code: e.target.value})}
+                    required
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <label>Aircraft Type</label>
+                <input
+                    type="text"
+                    value={formData.type}
+                    onChange={e => setFormData({...formData, type: e.target.value})}
+                    required
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <label>Capacity</label>
+                <input
+                    type="number"
+                    value={formData.capacity}
+                    onChange={e => {
+                        const value = e.target.value;   
+                        if (value < 0) {
+                            return;
+                        }
+                        setFormData({...formData, capacity: value});
+                    }}
+                    required
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <label>Status</label>
+                <select
+                    value={formData.status}
+                    onChange={e => setFormData({...formData, status: e.target.value})}
+                >
+                    <option value="Active">Active</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Retired">Retired</option>
+                </select>
+            </div>
+                
+            
         </AdminModal>
     );
 } 

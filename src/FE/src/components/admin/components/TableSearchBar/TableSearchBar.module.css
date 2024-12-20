@@ -76,6 +76,7 @@
     display: flex;
     align-items: center;
     width: 100%;
+    min-width: 200px;
 
     :global(.date-picker) {
         width: 100%;
@@ -206,6 +207,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-wrap: nowrap;
 }
 
 .statusToggleButton {
@@ -289,3 +291,96 @@
     cursor: pointer;
     user-select: none;
 }
+
+.timeSliderContainer,
+.dateRangeContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.timeInputs {
+    display: flex;
+    gap: 0.5em;
+    margin-top: 8px;
+}
+
+.timeInput,
+.dateInput {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    width: 100%;
+    flex-basis: 100%;
+}
+
+.timeInput label,
+.dateInput label,
+.dateTimeInput label  {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.timeInput input[type="time"] {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.timeInput input[type="time"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.dateTimeInput {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-basis: 100%;
+}
+
+.dateTimeInput input {
+    padding: 4px;
+    border: 1px solid #ddd;
+}
+
+.dateTimeFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 8px 16px 16px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.dateRangeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.dateRangeContainer input[type="datetime"] {
+    width: 100%;
+}
+
+.dateTimeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.dateTimeHeader svg {
+    color: #666;
+    font-size: 0.9em;
+}
+

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./ListTicket.css";
 import TicketCard from "./TicketCard.js";
 import FlightMap from "components/admin/pages/flights/FlightMap.js";
@@ -8,6 +8,8 @@ import { getCoordinates } from "data/const/airportCoordinates";
 import { formatDate } from "utils/date/formatDate";
 
 const ListTicket = ({ rawTickets }) => {
+  const listSectionRef = useRef(null);
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [tickets, setTickets] = useState([]);
 
@@ -51,12 +53,14 @@ const ListTicket = ({ rawTickets }) => {
 
   return (
     <div className="ticket-tab">
-      <div className="list-section">
+      <div className="list-section" ref={listSectionRef}>
         {tickets.map((ticket) => (
           <TicketCard
+            key={ticket.idTicket}
             ticket={ticket}
             selectedTicket={selectedTicket}
             onSelectTicket={handleTicketCardClick}
+            containerRef={listSectionRef}
           />
         ))}
       </div>

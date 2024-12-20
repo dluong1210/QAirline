@@ -43,6 +43,7 @@ export default function AdminBookings() {
         getAllBookings().then((data) => {
             const mappedData = data.map(ticket => ({
                 id: ticket.idTicket,
+                code: ticket.code,
                 passengerName: ticket.Customer.username,
                 flightNumber: ticket.ClassFlight.Flight.idFlight,
                 class: ticket.ClassFlight.class,
@@ -64,20 +65,27 @@ export default function AdminBookings() {
 
     const columns = [
         { key: 'id', label: 'Booking ID', type: 'text' },
+        // { key: 'code', label: 'Booking Code', type: 'text'},
         { key: 'passengerName', label: 'Passenger', type: 'text' },
         { key: 'flightNumber', label: 'Flight', type: 'text' },
-        { key: 'class', label: 'Class', type: 'text' },
+        {
+            key: 'class',
+            label: 'Class',
+            type: 'checkbox',
+            options: ['Economy', 'Business', 'First-Class']
+        },
         { key: 'departure', label: 'Departure Airport', type: 'text' },
         { key: 'destination', label: 'Destination Airport', type: 'text' },
-        { key: 'bookingDate', label: 'Booking Date', type: 'date' },
-        { key: 'travelDate', label: 'Travel Date', type: 'date' },
+        { key: 'amount', label: 'Amount', type: 'text' },
+        { key: 'bookingDate', label: 'Booking Date', type: 'datetime', showLabel: true, labelPadding: 'medium'},
+        { key: 'travelDate', label: 'Travel Date', type: 'datetime', showLabel: true, labelPadding: 'medium' },
         { 
             key: 'status', 
             label: 'Status', 
             type: 'checkbox',
             options: ['Confirmed', 'Pending', 'Cancelled']
         },
-        { key: 'amount', label: 'Amount', type: 'text' },
+        
     ];    
 
     return (

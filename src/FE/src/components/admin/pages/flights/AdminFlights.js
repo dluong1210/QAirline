@@ -13,37 +13,29 @@ import LoadingSpinner from 'components/LoadingPage/LoadingSpinner';
 
 import { getCoordinates } from 'data/const/airportCoordinates';
 import { formatDate } from 'utils/date/formatDate';
+import { FlightStatus, getFlightStatus } from 'types/flightStatus/FlightStatus';
+import AdminModal from 'components/admin/components/Modal/AdminModal';
 
 export default function AdminFlights() {
     const [selectedFlight, setSelectedFlight] = useState(null);
 
     const {getAllFlightsAdmin} = useFlight();
     const [flights, setFlights] = useState([]);
+    const [filteredFlights, setFilteredFlights] = useState(flights);
     const [loadState, setLoadState] = useState(LoadState.LOADING);
 
     useEffect(() => {
         handleRefresh();
     }, []);
 
-    const FlightStatus = {
-        SCHEDULED: "Scheduled",
-        ONGOING: "Ongoing",
-        COMPLETED: "Completed",
-
-    }
-
-    const getFlightStatus = (flight) => {
-        const departureTimeNumber = Date.parse(flight.departureTime)
-        if (departureTimeNumber - Date.now() > 0) return FlightStatus.SCHEDULED;
-        else if (Date.parse(flight.arrivalTime) - Date.now() > 0) return FlightStatus.ONGOING;
-        else return FlightStatus.COMPLETED;
-    }
+    
 
     const handleRefresh = () => {
         setLoadState(LoadState.LOADING);
         getAllFlightsAdmin().then((data) => {
             const mappedData = data.map(flight => ({ 
                 idFlight: flight.idFlight,
+                flightNumber: `QA${flight.idFlight}`,
                 aircraftCode: flight.Airplane.code,
                 aircraft: flight.Airplane.type,
                 origin: flight.beginAirport.city,
@@ -54,8 +46,9 @@ export default function AdminFlights() {
                 arrivalTime: formatDate(flight.timeEnd),
                 status: getFlightStatus(flight),
             }))
-            // .filter(flight => getFlightStatus(flight) === "")
+            // .filter(flight => flight.status === FlightStatus.ONGOING)
             setFlights(mappedData);
+            setFilteredFlights(mappedData);
             setLoadState(LoadState.SUCCESS);
         }).catch((error) => {
             console.error(error);
@@ -64,17 +57,20 @@ export default function AdminFlights() {
     };
 
     const columns = [
-        { key: 'aircraftCode', label: 'Aircraft Code', type: 'text' },
-        { key: 'aircraft', label: 'Aircraft', type: 'text' },
+        // { key: 'aircraftCode', label: 'Aircraft Code', type: 'text' },
         { key: 'origin', label: 'Origin', type: 'text' },
         { key: 'destination', label: 'Destination', type: 'text' },
-        { key: 'departureTime', label: 'Departure', type: 'date', showLabel: true, labelPadding: 'medium' },
-        { key: 'arrivalTime', label: 'Arrival', type: 'date', showLabel: true, labelPadding: 'medium' },
+        { key: 'aircraft', label: 'Aircraft', type: 'text' },
+        // { key: 'departureDate', label: 'Departure', type: 'date', showLabel: true, labelPadding: 'medium' },
+        // { key: 'departureTime', label: '', type: 'timeSlider'},
+        { key: 'departureTime', label: 'Departure', type: 'datetime', showLabel: true, labelPadding: 'medium' },
+        { key: 'arrivalTime', label: 'Arrival', type: 'datetime', showLabel: true, labelPadding: 'medium' },
+        // { key: 'arrivalDate', label: 'Arrival', type: 'date', showLabel: true, labelPadding: 'medium' },
         { 
             key: 'status',
             label: 'Status', 
-            type: 'select', 
-            options: ['Scheduled', 'Ongoing', 'Completed', 'Cancelled'] 
+            type: 'checkbox', 
+            options: [FlightStatus.ONGOING, FlightStatus.SCHEDULED, FlightStatus.COMPLETED] 
         },
     ];
 
@@ -88,14 +84,21 @@ export default function AdminFlights() {
         }
     }
 
+    const [globalSearch, setGlobalSearch] = useState('');
+    const [columnFilters, setColumnFilters] = useState([]);
+
     const handleSearch = (searchQuery) => {
-        const filteredFlights = flights.filter(flight => searchFilter(flight, searchQuery));
-        setFlights(filteredFlights);
+        setGlobalSearch(searchQuery);
+        let filteredFlights = flights.filter(flight => searchFilter(flight, searchQuery));
+        filteredFlights = filteredFlights.filter(flight => columnFilter(flight, columnFilters))
+        setFilteredFlights(filteredFlights);
     }
 
     const handleColumnFilter = (filters) => {
-        const filteredFlights = flights.filter(flight => columnFilter(flight, filters));
-        setFlights(filteredFlights);
+        setColumnFilters(filters);
+        let filteredFlights = flights.filter(flight => columnFilter(flight, filters));
+        filteredFlights = filteredFlights.filter(flight => searchFilter(flight, globalSearch));
+        setFilteredFlights(filteredFlights);
     }
 
     return (
@@ -115,14 +118,15 @@ export default function AdminFlights() {
                         <LoadingSpinner />
                     ) : (
                         <div className={styles.flightsList}>
-                            {flights.map(flight => (
+                            {filteredFlights.map(flight => (
                                 <div 
                                     key={flight.idFlight}
                                     className={`${styles.flightCard} ${selectedFlight?.idFlight === flight.idFlight ? styles.selected : ''}`}
                                     onClick={() => handleFlightCardClick(flight)}
                                 >
+                                    
                                     <div className={styles.flightHeader}>
-                                        <span className={styles.flightNumber}>{flight.aircraftCode}</span>
+                                        <div className={styles.flightNumber}>Flight Number: {flight.flightNumber}</div>
                                         <span className={`${styles.status} ${styles[flight.status.toLowerCase()]}`}>
                                             {flight.status}
                                         </span>
@@ -139,6 +143,7 @@ export default function AdminFlights() {
                                         </div>
                                     </div>
                                     <div className={styles.flightFooter}>
+                                        <span className={styles.aircraftCode}>{flight.aircraftCode}</span>
                                         <span className={styles.aircraft}>{flight.aircraft}</span>
                                     </div>
                                 </div>
@@ -155,4 +160,4 @@ export default function AdminFlights() {
             </div>
         </div>
     );
-} 
+}

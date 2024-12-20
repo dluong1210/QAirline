@@ -31,7 +31,9 @@ const ProtectedAdminRoute = ({ children }) => {
         verifyAuth();
     }, []);
 
-    if (authStatus === AuthState.ELEVATED) return children;
+    if (authStatus === AuthState.ELEVATED) {
+        return children;
+    }
 
     if (authStatus === AuthState.LOADING) {
         return <LoadingPage />;

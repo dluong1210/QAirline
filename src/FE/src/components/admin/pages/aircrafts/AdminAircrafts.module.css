@@ -19,44 +19,7 @@
     border-radius: 4px;
 }
 
-.modalActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
-}
 
-.modalActions button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.modalActions button[type="submit"] {
-    background-color: #db3434;
-    color: white;
-}
-
-.modalActions button[type="submit"]:hover {
-    background-color: #e05454;
-}  
-
-.modalActions button[type="submit"]:active {
-    background-color: #cc2727;
-}
-
-.modalActions button[type="button"] {
-    background-color: #e0e0e0;
-} 
-
-.modalActions button[type="button"]:hover {
-    background-color: #cfcfcf;
-}
-
-.modalActions button[type="button"]:active {
-    background-color: #b0b0b0;
-}
  
 
 
