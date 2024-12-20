@@ -14,7 +14,7 @@ import airplaneRouter from "./routes/airplane.js";
 dotenv.config();
 
 const AWS_IP = 'https://54.169.30.97';
-const LOCALHOST = 'http://localhost:3000';
+const LOCALHOST = 'https://q-airline-web.vercel.app/';
 
 const app = express();
 const port = process.env.PORT || 8000;
