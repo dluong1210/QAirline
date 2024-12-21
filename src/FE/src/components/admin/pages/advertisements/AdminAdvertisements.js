@@ -18,7 +18,7 @@ const mockAdvertisements = [
 export default function AdminAdvertisements() {
     const {uploadAdvert, createAdvert, deleteAdvert, getAllAdvert} = useAdvert();
 
-    const [advertisements, setAdvertisements] = useState(mockAdvertisements);
+    const [advertisements, setAdvertisements] = useState([]);
 
     const [loadState, setLoadState] = useState(LoadState.LOADING);
 
@@ -143,6 +143,9 @@ export default function AdminAdvertisements() {
             <div className={styles.currentAds}>
                 <h2>Current Advertisements</h2>
                 <div className={styles.adsGrid}>
+                    {advertisements.length === 0 && (
+                        <div>No advertisement yet.</div>
+                    )}
                     {advertisements.map((ad) => (
                         <div key={ad.idAdvertisement} className={styles.adCard}>
                             <img src={ad.image_url} alt={ad.description} />

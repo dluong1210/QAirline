@@ -4,9 +4,12 @@ import { LoadState } from "types/states/LoadState";
 
 import ListTicket from "components/ticket/ListTicket.js";
 import Notification from "components/Notification/Notification.js";
+import { formatDate } from "utils/date/formatDate";
 import { BACKEND_BASE_URL } from "services/api";
+import { useAuth } from "contexts/AuthContext";
 
-const TicketComponent = ({ ticket }) => {
+export const TicketComponent = ({ ticket }) => {
+  const { user } = useAuth();
   const string = ticket.code;
   const seat = string.split("-").pop();
   return (
@@ -51,21 +54,19 @@ const TicketComponent = ({ ticket }) => {
             >
               <div>
                 <h4>DEPARTURE:</h4>
-                <p>
-                  {new Date(
-                    ticket.ClassFlight.Flight.timeStart
-                  ).toLocaleString()}
-                </p>
+                <p>{formatDate(ticket.ClassFlight.Flight.timeStart)}</p>
               </div>
               <div>
                 <h4>ARRIVAL:</h4>
-                <p>
-                  {new Date(ticket.ClassFlight.Flight.timeEnd).toLocaleString()}
-                </p>
+                <p>{formatDate(ticket.ClassFlight.Flight.timeEnd)}</p>
               </div>
               <div>
                 <h4>SEAT:</h4>
                 <p>{seat}</p>
+              </div>
+              <div>
+                <h4>GATE:</h4>
+                <p>G22</p>
               </div>
             </div>
             <div
@@ -76,10 +77,11 @@ const TicketComponent = ({ ticket }) => {
               }}
             >
               <div>
-                <h4>FULL NAME:</h4>
+                <h4>NAME:</h4>
                 <p>
-                  {document.getElementById("last-name").value}{" "}
-                  {document.getElementById("first-name").value}
+                  {user.username}
+                  {/* {document.getElementById("last-name").value}{" "}
+                  {document.getElementById("first-name").value} */}
                 </p>
               </div>
               <div>
@@ -118,6 +120,7 @@ function MyFlight() {
   const [myticket, setMyTicket] = useState();
   const [showTicket, setShowTicket] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [notification, setNotification] = useState("Error.");
   const [loadState, setLoadState] = useState(LoadState.LOADING);
 
   const getAllTickets = async () => {
@@ -155,6 +158,7 @@ function MyFlight() {
         setShowTicket(true);
         window.scrollTo(0, 430);
       } else if (response.status === 404) {
+        setNotification("No tickets have been found.");
         setShowNotification(true);
         setShowTicket(false);
         setTimeout(() => {
@@ -171,6 +175,11 @@ function MyFlight() {
   return (
     <main>
       <div className="myflights-container">
+        <Notification
+          message={notification}
+          show={showNotification}
+          isSuccessful={notification === "Delete ticket successfully."} //Magic string =)))).
+        />
         <div className="content">
           <div className="toprow-myflights">
             <button
@@ -204,10 +213,6 @@ function MyFlight() {
 
           {view === "form" ? (
             <div className="bottomrow-myflights">
-              <Notification
-                message={"No tickets have been found."}
-                show={showNotification}
-              />
               <div className="flight-form">
                 <h2>MY BOOKED TICKETS</h2>
                 <p>
@@ -262,7 +267,11 @@ function MyFlight() {
               </div> */}
 
               {tickets.length !== 0 ? (
-                <ListTicket rawTickets={tickets} />
+                <ListTicket
+                  rawTickets={tickets}
+                  setShowNotification={setShowNotification}
+                  setNotification={setNotification}
+                />
               ) : (
                 <div className="empty-state">
                   <svg

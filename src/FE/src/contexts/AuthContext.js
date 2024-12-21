@@ -15,7 +15,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     // Check sessionStorage for existing user data when component mounts
-    const savedUser = sessionStorage.getItem('user');
+    const savedUser = sessionStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [authStatus, setAuthStatus] = useState(AuthState.LOADING);
@@ -23,16 +23,16 @@ export function AuthProvider({ children }) {
   // Update sessionStorage whenever user state changes
   useEffect(() => {
     if (user) {
-      sessionStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem("user", JSON.stringify(user));
     } else {
-      sessionStorage.removeItem('user');
+      sessionStorage.removeItem("user");
     }
   }, [user]);
 
   // Try to verify credentials on mount
   useEffect(() => {
-    verifyAuth()
-  }, [])
+    verifyAuth();
+  }, []);
 
   const verifyAuth = async () => {
     try {
@@ -62,7 +62,6 @@ export function AuthProvider({ children }) {
           setUser(adminUserData);
           setAuthStatus(AuthState.ELEVATED);
           return;
-
         } catch (error) {
           if (error instanceof TypeError) {
             setAuthStatus(AuthState.SERVER_UNAVAILABLE);

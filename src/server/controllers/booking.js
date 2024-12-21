@@ -8,6 +8,7 @@ import {
   Flight,
   Airport,
   Notification,
+  Customer,
 } from "../models/model.js";
 
 const sendNotification = async (
@@ -207,5 +208,65 @@ export const getAllTickets = async (req, res) => {
     res.send(tickets);
   } catch (err) {
     res.status(500).send(err.message);
+  }
+};
+
+export const deleteTicket = async (req, res) => {
+  const { idCustomer } = req.user;
+  const { idTicket } = req.query;
+  if (!idTicket) {
+    return res.status(400).json({ message: "idFlight is required." });
+  }
+  const transaction = await sequelize.transaction();
+  try {
+    const ticket = await Ticket.findOne({
+      where: { idTicket },
+      include: {
+        model: ClassFlight,
+      },
+      transaction,
+    });
+
+    if (!ticket || !ticket.ClassFlight) {
+      await transaction.rollback();
+      return res.status(404).json({
+        message: `ClassFlight not found for the given ticket.`,
+      });
+    }
+
+    const [updateRows] = await ClassFlight.update(
+      {
+        seatBooked: ticket.ClassFlight.seatBooked - 1,
+      },
+      {
+        where: { idClassFlight: ticket.ClassFlight.idClassFlight },
+        transaction,
+      }
+    );
+
+    if (updateRows === 0) {
+      await transaction.rollback();
+      return res.status(400).json({
+        message: `Failed to update ClassFlight.`,
+      });
+    }
+    const deletedRows = await Ticket.destroy({
+      where: { idTicket, idCustomer },
+      transaction,
+    });
+
+    if (deletedRows === 0) {
+      await transaction.rollback();
+      return res.status(404).json({
+        message: `Ticket not found`,
+      });
+    }
+    await transaction.commit();
+    res.send(`Ticket deleted and ClassFlight updated successfully.`);
+  } catch (err) {
+    await transaction.rollback();
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };
