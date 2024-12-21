@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "./News.css";
+import { useAdvert } from "hooks/advert/useAdvert";
+
+const mocksNewsData = [
+  { id: 1, image_url: "img/adv3.jpg" },
+  { id: 2, image_url: "img/adv3.jpg" },
+  { id: 3, image_url: "img/adv3.jpg" }
+];
 
 const News = () => {
-  const newsData = [
-    { id: 1, image: "img/noel.jpg" },
-    { id: 2, image: "img/noel.jpg" },
-    { id: 3, image: "img/noel.jpg" },
-    { id: 4, image: "img/noel.jpg" },
-    { id: 5, image: "img/noel.jpg" },
-  ];
+  const {getAllAdvert} = useAdvert();
+  const [newsData, setNewsData] = useState([]);
+
+  useEffect(() => {
+    getAllAdvert().then(data => {
+      setNewsData(mocksNewsData.map(ad => ({
+        id: ad.idAdvertisement,
+        image: ad.image_url,
+      })));
+    })
+  }, [])
+
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -50,13 +62,13 @@ const News = () => {
           }}
         >
           {newsData.map((news) => (
-            <div className="news-slide" key={news.id}>
+            <a className="news-slide" key={news.id} href="/adv2">
               <img src={news.image} alt={news.title} className="news-image" />
               <div className="news-content">
                 <h2>{news.title}</h2>
                 <p>{news.description}</p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

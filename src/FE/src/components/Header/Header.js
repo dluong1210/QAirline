@@ -30,7 +30,7 @@ const Notification = () => {
         const data = await response.json();
 
         if (Array.isArray(data)) {
-          setNotifications(data);
+          setNotifications(data.reverse());
           const unread = data.filter((notification) => notification.unRead).length;
           setUnreadCount(unread);
         } else {
@@ -70,7 +70,7 @@ const Notification = () => {
             Error: {error}
           </p>
         ) : notifications.length > 0 ? (
-          notifications.reverse().map((notification, index) => (
+          notifications.map((notification, index) => (
             <div
               key={index}
               className={`notification-item ${notification.unRead ? 'unread' : ''}`}
@@ -98,10 +98,11 @@ const UserDropdown = ({ avatar, setAvatar }) => {
 
   const handleLogout = () => {
     setShowDropdown(false);
-    if (logout()) {
-      navigate('/');
-      window.location.reload();
-    }
+    logout().then(success => {
+      if (success) {
+        navigate('/');
+      }
+    })
   };
 
   return (

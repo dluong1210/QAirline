@@ -24,7 +24,16 @@ const groupByCountry = (data) => {
 
 const AirportSearch = forwardRef(
   (
-    { airports, onSelectAirport, type, idOther, nextInputRef, inputRef, disabled=false, initialValue=null },
+    {
+      airports,
+      onSelectAirport,
+      type,
+      idOther,
+      nextInputRef,
+      inputRef,
+      disabled = false,
+      initialValue = null,
+    },
     ref
   ) => {
     const [query, setQuery] = useState("");
@@ -34,11 +43,11 @@ const AirportSearch = forwardRef(
     const [selected, setSelected] = useState(false);
     const listRef = useRef(null);
 
-  useEffect(() => {
-    if (initialValue) {
-      handleSelect(initialValue);
-    }
-  }, [])
+    useEffect(() => {
+      if (initialValue) {
+        handleSelect(initialValue);
+      }
+    }, []);
 
     useEffect(() => {
       if (airports && Array.isArray(airports)) {
@@ -132,14 +141,11 @@ const AirportSearch = forwardRef(
           placeholder={`${type} Destination`}
           value={query}
           className="input-field"
-          onFocus={() => {
-            setShowList(true);
-            window.scrollTo({ top: 300, behavior: "smooth" });
-          }}
+          onFocus={() => setShowList(true)}
           onChange={handleSearch}
           ref={inputRef}
           disabled={disabled}
-      />
+        />
 
         {/* Danh sách hiển thị */}
         {showList && (

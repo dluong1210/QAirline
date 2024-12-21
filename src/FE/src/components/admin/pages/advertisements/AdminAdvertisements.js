@@ -1,29 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './AdminAdvertisements.module.css';
 import { FaPlus, FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import AdminPageTitle from 'components/admin/components/PageTitle/AdminPageTitle';
+import { useAdvert } from 'hooks/advert/useAdvert';
+import toDataURL from 'utils/image/toDataUrl';
+import { LoadState } from 'types/states/LoadState';
 
 const mockAdvertisements = [
     {
-        id: 1,
-        imageUrl: 'https://example.com/ad1.jpg',
-        title: 'Summer Sale',
-        link: 'https://example.com/summer-sale',
-        active: true,
-        order: 1
+        idAdvertisement: 1,
+        image_url: 'https://example.com/ad1.jpg',
+        description: 'Summer Sale',
+        // type: 'Summer Sale',
     }
 ]
 
 export default function AdminAdvertisements() {
+    const {uploadAdvert, createAdvert, deleteAdvert, getAllAdvert} = useAdvert();
 
     const [advertisements, setAdvertisements] = useState(mockAdvertisements);
 
-    const [newAd, setNewAd] = useState({
-        title: '',
-        link: '',
+    const [loadState, setLoadState] = useState(LoadState.LOADING);
+
+    useEffect(() => {
+        getAllAdvert().then(data => {
+            setAdvertisements(data);
+            setLoadState(LoadState.SUCCESS);
+        })
+    }, [])
+
+    const defaultNewAd = {
+        // type: '',
+        description: '',
         imageFile: null,
         imagePreview: null
-    });
+    }
+
+    const [newAd, setNewAd] = useState(defaultNewAd);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -36,12 +49,41 @@ export default function AdminAdvertisements() {
         }
     };
 
-    const handleMoveAd = (id, direction) => {
-        // Implement order changing logic
+    const handleAddAdvertisement = () => {
+        setLoadState(LoadState.LOADING);
+        uploadAdvert(newAd.imageFile)
+            .then(data => {
+                return createAdvert({
+                    description: newAd.description,
+                    image_url: data.url,
+                });
+            })
+            .then(newAdvert => {
+                setAdvertisements(prev => [
+                    ...prev,
+                    newAdvert,
+                ]);
+                setNewAd(defaultNewAd);
+            })
+            .catch(error => {
+                console.error("Error uploading advertisement:", error);
+                // Handle error (e.g., show a notification to the user)
+                setLoadState(LoadState.ERROR);
+            })
+            .finally(() => {
+                setLoadState(LoadState.SUCCESS);
+            });
+    }
+
+    const handleDeleteAd = (idAdvertisement) => {
+        // Implement delete logic
+        deleteAdvert(idAdvertisement).then(
+            setAdvertisements(prev => prev.filter(ad => ad.idAdvertisement !== idAdvertisement))
+        )
     };
 
-    const handleDeleteAd = (id) => {
-        // Implement delete logic
+    const handleMoveAd = (id, direction) => {
+        // Implement order changing logic
     };
 
     const handleToggleActive = (id) => {
@@ -75,19 +117,25 @@ export default function AdminAdvertisements() {
                         </label>
                     </div>
                     <div className={styles.formFields}>
-                        <input
+                        {/* <input
                             type="text"
                             placeholder="Advertisement Title"
-                            value={newAd.title}
-                            onChange={(e) => setNewAd({ ...newAd, title: e.target.value })}
-                        />
+                            value={newAd.type}
+                            onChange={(e) => setNewAd({ ...newAd, type: e.target.value })}
+                        /> */}
                         <input
-                            type="url"
-                            placeholder="Advertisement Link"
-                            value={newAd.link}
-                            onChange={(e) => setNewAd({ ...newAd, link: e.target.value })}
+                            type="text"
+                            placeholder="Advertisement Description"
+                            value={newAd.description}
+                            onChange={(e) => setNewAd({ ...newAd, description: e.target.value })}
                         />
-                        <button className={styles.submitButton}>Add Advertisement</button>
+                        <button className={styles.submitButton} onClick={handleAddAdvertisement} disabled={loadState === LoadState.LOADING}>
+                            {loadState === LoadState.LOADING ? (
+                                <span className={styles.loadingSpinner}></span>
+                            ) : (
+                                'Add Advertisement'
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -96,32 +144,32 @@ export default function AdminAdvertisements() {
                 <h2>Current Advertisements</h2>
                 <div className={styles.adsGrid}>
                     {advertisements.map((ad) => (
-                        <div key={ad.id} className={styles.adCard}>
-                            <img src={ad.imageUrl} alt={ad.title} />
+                        <div key={ad.idAdvertisement} className={styles.adCard}>
+                            <img src={ad.image_url} alt={ad.description} />
                             <div className={styles.adInfo}>
-                                <h3>{ad.title}</h3>
-                                <a href={ad.link} target="_blank" rel="noopener noreferrer">
+                                <h3>{ad.description}</h3>
+                                {/* <a href={ad.link} target="_blank" rel="noopener noreferrer">
                                     {ad.link}
-                                </a>
+                                </a> */}
                             </div>
                             <div className={styles.adControls}>
-                                <button
+                                {/* <button
                                     className={`${styles.toggleButton} ${ad.active ? styles.active : ''}`}
-                                    onClick={() => handleToggleActive(ad.id)}
+                                    onClick={() => handleToggleActive(ad.idAdvertisement)}
                                 >
                                     {ad.active ? 'Active' : 'Inactive'}
-                                </button>
-                                <div className={styles.orderControls}>
-                                    <button onClick={() => handleMoveAd(ad.id, 'up')}>
+                                </button> */}
+                                {/* <div className={styles.orderControls}>
+                                    <button onClick={() => handleMoveAd(ad.idAdvertisement, 'up')}>
                                         <FaArrowUp />
                                     </button>
-                                    <button onClick={() => handleMoveAd(ad.id, 'down')}>
+                                    <button onClick={() => handleMoveAd(ad.idAdvertisement, 'down')}>
                                         <FaArrowDown />
                                     </button>
-                                </div>
+                                </div> */}
                                 <button
                                     className={styles.deleteButton}
-                                    onClick={() => handleDeleteAd(ad.id)}
+                                    onClick={() => handleDeleteAd(ad.idAdvertisement)}
                                 >
                                     <FaTrash />
                                 </button>

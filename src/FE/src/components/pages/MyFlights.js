@@ -8,12 +8,13 @@ import { BACKEND_BASE_URL } from "services/api";
 
 const TicketComponent = ({ ticket }) => {
   const string = ticket.code;
-  const seat = string.split('-').pop();
+  const seat = string.split("-").pop();
   return (
     <div className="ticket-container">
       <div key={ticket.idTicket} className="ticket">
         <div className="ticket-header">
-        <img src="img/LOGO.png" style={{width: "100px"}}/>
+          <img src="img/LOGO.png" style={{ width: "100px" }} />
+          <div className="title-ticket" style={{ background: "red", padding: "10px 30px", borderRadius: "10px", color: "white", fontWeight: "600"}}>{ticket.status}</div>
         </div>
         <div className="ticket-details">
           <div className="flight-info">
@@ -22,7 +23,10 @@ const TicketComponent = ({ ticket }) => {
               <p>QA{ticket.ClassFlight.Flight.idFlight}</p>
             </div>
             <div>
-              <img src="img/mavach.png" style={{ height: "60px", width: "400px" }} />
+              <img
+                src="img/mavach.png"
+                style={{ height: "60px", width: "400px" }}
+              />
             </div>
             <div>
               <div style={{ display: "flex", alignItems: "center" }}>
@@ -38,24 +42,45 @@ const TicketComponent = ({ ticket }) => {
             </div>
           </div>
           <div className="time-info">
-            <div style={{ display: "flex", justifyContent: "space-between", width: "37%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "37%",
+              }}
+            >
               <div>
                 <h4>DEPARTURE:</h4>
-                <p>{new Date(ticket.ClassFlight.Flight.timeStart).toLocaleString()}</p>
+                <p>
+                  {new Date(
+                    ticket.ClassFlight.Flight.timeStart
+                  ).toLocaleString()}
+                </p>
               </div>
               <div>
                 <h4>ARRIVAL:</h4>
-                <p>{new Date(ticket.ClassFlight.Flight.timeEnd).toLocaleString()}</p>
+                <p>
+                  {new Date(ticket.ClassFlight.Flight.timeEnd).toLocaleString()}
+                </p>
               </div>
               <div>
                 <h4>SEAT:</h4>
                 <p>{seat}</p>
               </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", width: "29.5%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "29.5%",
+              }}
+            >
               <div>
                 <h4>FULL NAME:</h4>
-                <p>{document.getElementById("last-name").value} {document.getElementById("first-name").value}</p>
+                <p>
+                  {document.getElementById("last-name").value}{" "}
+                  {document.getElementById("first-name").value}
+                </p>
               </div>
               <div>
                 <h4>CLASS:</h4>
@@ -70,12 +95,15 @@ const TicketComponent = ({ ticket }) => {
         </div>
         <div className="seat-info">
           <p>
-            Seats Booked: {ticket.ClassFlight.seatBooked} / {ticket.ClassFlight.seatAmount}
+            Seats Booked: {ticket.ClassFlight.seatBooked} /{" "}
+            {ticket.ClassFlight.seatAmount}
           </p>
         </div>
         <div className="ticket-header">
-        <h4 className="title-ticket" style={{fontWeight: "500"}}>The boarding gate closes 15 minutes before departure time.</h4>
-        <h4>Hotline: 1900 9099</h4>
+          <h4 className="title-ticket" style={{ fontWeight: "500" }}>
+            The boarding gate closes 15 minutes before departure time.
+          </h4>
+          <h4>Hotline: 1900 9099</h4>
         </div>
       </div>
     </div>
@@ -83,14 +111,14 @@ const TicketComponent = ({ ticket }) => {
 };
 
 function MyFlight() {
-  const [ view, setView ] = useState("form");
+  const [view, setView] = useState("form");
 
-  const [ code, setCode ] = useState("");
-  const [ tickets, setTickets ] = useState([]);
-  const [ myticket, setMyTicket ] = useState();
-  const [ showTicket, setShowTicket ] = useState(false);
-  const [ showNotification, setShowNotification ] = useState(false);
-  const [ loadState, setLoadState ] = useState(LoadState.LOADING);
+  const [code, setCode] = useState("");
+  const [tickets, setTickets] = useState([]);
+  const [myticket, setMyTicket] = useState();
+  const [showTicket, setShowTicket] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [loadState, setLoadState] = useState(LoadState.LOADING);
 
   const getAllTickets = async () => {
     try {
@@ -125,6 +153,7 @@ function MyFlight() {
         const result = await response.json();
         setMyTicket(result);
         setShowTicket(true);
+        window.scrollTo(0, 430);
       } else if (response.status === 404) {
         setShowNotification(true);
         setShowTicket(false);
@@ -145,8 +174,9 @@ function MyFlight() {
         <div className="content">
           <div className="toprow-myflights">
             <button
-              className={`search-codemyflights ${view === "form" ? "active-flightoption" : ""
-                }`}
+              className={`search-codemyflights ${
+                view === "form" ? "active-flightoption" : ""
+              }`}
               onClick={() => setView("form")}
             >
               <div className="inside-codemyflights">
@@ -155,8 +185,9 @@ function MyFlight() {
               </div>
             </button>
             <button
-              className={`search-myflights ${view === "noCode" ? "active-flightoption" : ""
-                }`}
+              className={`search-myflights ${
+                view === "noCode" ? "active-flightoption" : ""
+              }`}
               onClick={() => {
                 setView("noCode");
                 setShowTicket(false);
@@ -522,7 +553,7 @@ function MyFlight() {
               )}
             </div>
           )}
-          {showTicket && (<TicketComponent ticket={myticket} />)}
+          {showTicket && <TicketComponent ticket={myticket} />}
         </div>
       </div>
     </main>

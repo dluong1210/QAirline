@@ -42,6 +42,7 @@
     justify-content: center;
     cursor: pointer;
     transition: border-color 0.3s;
+    min-height: 350px;
 }
 
 .uploadLabel:hover {
@@ -107,10 +108,6 @@
     padding: 16px;
 }
 
-.adInfo h3 {
-    margin: 0 0 8px 0;
-}
-
 .adInfo a {
     color: #1890ff;
     text-decoration: none;
@@ -120,7 +117,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 16px;
 }
 
 .toggleButton {
@@ -154,8 +150,25 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-left: auto;
 }
 
 .deleteButton:hover {
     background-color: #ff4d4f;
+}
+
+.loadingSpinner {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 } 

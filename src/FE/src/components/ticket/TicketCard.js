@@ -11,6 +11,7 @@ const TicketCard = ({
 
   const [isSelected, setSelected] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const formatDateAndTime = (isoDate) => {
     const date = new Date(isoDate);
@@ -52,7 +53,6 @@ const TicketCard = ({
         if (cardRef.current && containerRef.current) {
           const cardRect = cardRef.current.getBoundingClientRect();
           const containerRect = containerRef.current.getBoundingClientRect();
-          // console.log(cardRect.top, containerRef.current.scrollTop);
           const scrollTop =
             containerRef.current.scrollTop +
             (cardRect.top - containerRect.top) -
@@ -86,6 +86,19 @@ const TicketCard = ({
   const handleDeleteTicket = () => {
     console.log("Delete ticket clicked");
     // Logic xóa vé
+  };
+
+  const confirmDelete = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleConfirmDelete = () => {
+    handleDeleteTicket();
+    setShowDeleteConfirmation(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirmation(false);
   };
 
   useEffect(() => {
@@ -158,21 +171,41 @@ const TicketCard = ({
           </div>
         </div>
       </div>
+
       {(isSelected || isAnimating) && (
         <div
           className={`action-box ${
             isSelected ? "show" : isAnimating ? "hide" : ""
           }`}
         >
-          <button className="btn delete-ticket">
+          <button className="btn delete-ticket" onClick={confirmDelete}>
             <i className="fas fa-trash"></i>
             <span>Delete Ticket</span>
           </button>
-          <button className="btn view-details">
+          <button className="btn view-details" onClick={handleViewDetails}>
             <span>View Details </span>
             <i className="fas fa-eye"></i>
           </button>
         </div>
+      )}
+
+      {showDeleteConfirmation && (
+        <>
+          <div className="overlay-delete"></div>
+          <div className="delete-confirmation-box">
+            <div className="confirmation-message">
+              <p style={{fontSize: "18px", fontWeight: "600"}}>Are you sure you want to delete this ticket?</p>
+            </div>
+            <div className="confirmation-buttons">
+              <button className="btn yes" onClick={handleConfirmDelete} style={{padding: "10px 20px", border: "none", cursor: "pointer", borderRadius: "30px"}}>
+                Yes
+              </button>
+              <button className="btn no" onClick={handleCancelDelete} style={{padding: "10px 20px", border: "none", cursor: "pointer", borderRadius: "30px"}}>
+                No
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

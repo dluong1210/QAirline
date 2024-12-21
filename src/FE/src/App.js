@@ -7,6 +7,7 @@ import ActionForm from './components/ActionForm/ActionForm';
 import MobileHeader from './components/Header/MobileHeader';
 import Home from './components/pages/Home';
 import News from './components/pages/News';
+import AdvertisementPage2 from './components/pages/AdvertisementPage2';
 import Destination from './components/pages/Destination';
 import MyFlight from './components/pages/MyFlights';
 import SearchFlight from './components/SearchFlight/SearchFlight';
@@ -66,6 +67,7 @@ class App extends Component {
                 <rd.Route index element={<Home />}></rd.Route>
                 <rd.Route path="/myflights" element={<MyFlight />}></rd.Route>
                 <rd.Route path="/news" element={<News />}></rd.Route>
+                <rd.Route path="/adv2" element={<AdvertisementPage2 />}></rd.Route>
                 <rd.Route path="/destination" element={<Destination />}></rd.Route>
                 <rd.Route path="/searchflights" element={<SearchFlight />}></rd.Route>
                 <rd.Route path="/passenger" element={<Passenger />}></rd.Route>

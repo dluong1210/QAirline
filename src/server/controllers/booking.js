@@ -2,6 +2,7 @@ import { col } from "sequelize";
 import { sequelize } from "../models/config.model.js";
 
 import {
+  Customer,
   ClassFlight,
   Ticket,
   Flight,

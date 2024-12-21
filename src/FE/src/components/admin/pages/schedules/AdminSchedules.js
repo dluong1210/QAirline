@@ -77,11 +77,6 @@ const AdminSchedules = () => {
                 })
                 setFlights(prev => [...prev, newFlight]);
                 setFilteredFlights(prev => [...prev, newFlight]);
-                console.log("---------START CREATE LOG------------");
-                console.log(newFlight);
-                console.log(flights);
-                console.log(filteredFlights);
-                console.log("---------END CREATE LOG------------")
             })
         })
         setIsModalOpen(false);
