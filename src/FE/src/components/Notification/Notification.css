@@ -34,6 +34,7 @@
 }
 
 .notification .content-message {
+  width: 220px;
   font-size: 14px;
   color: #747171;
 }

@@ -201,6 +201,7 @@ body {
   border-bottom-right-radius: 8px;
   overflow: hidden;
   display: flex;
+  margin-bottom: 10px;
 }
 
 .search-flight-container .airbus {
